@@ -58,8 +58,22 @@ Node *rotate_node(Node *n, int direction){
 Node *insert_node(Node *n, int value){
     if(n == NULL)
         return new_node(value);
+    
+    //==============================================================//
+    
+    int direction = compare(value, n->value) == value ? RIGHT : LEFT;
+    
+    n->child[direction] = insert_node(n->child[direction], value);    
+    n->height = compare(node_height(n->left), node_height(n->right)) + 1;
+    
+    int balance = node_balance(n);
+    
+    if(balance > 1 || balance < -1){
+        /***/
+    }
+    //==============================================================//
 
-    if(value < n->value)
+    /*if(value < n->value)
         n->left = insert_node(n->left, value);
     else if(value > n->value)
         n->right = insert_node(n->right, value);
@@ -78,7 +92,7 @@ Node *insert_node(Node *n, int value){
         if(value < n->right->value)
             n->right = rotate_node(n->right, RIGHT);
         return rotate_node(n, LEFT);
-    }
+    }*/
 
     return n;
 }
