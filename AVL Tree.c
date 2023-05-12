@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
 #include <time.h>
 
 typedef struct node{
@@ -9,7 +8,6 @@ typedef struct node{
     int height;
 }Node;
 
-#define NIL     NULL
 #define LEFT    0
 #define RIGHT   1
 #define left    child[LEFT]
