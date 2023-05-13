@@ -64,23 +64,7 @@ Node *insert_node(Node *n, int value){
     int direction = compare(value, n->value) == value ? RIGHT : LEFT;
     
     n->child[direction] = insert_node(n->child[direction], value);    
-    n->height = compare(node_height(n->left), node_height(n->right)) + 1;
-    
-    int balance = node_balance(n);
-    
-    if(balance > 1 || balance < -1){
-        /***/
-    }
-    //==============================================================//
-
-    /*if(value < n->value)
-        n->left = insert_node(n->left, value);
-    else if(value > n->value)
-        n->right = insert_node(n->right, value);
-    else
-        return n;
-
-    int balance = node_balance(n);
+    n->height = compare(node_height(n->left), node_height(n->right)) + 1;  
 
     if(balance > 1){
         if(value > n->left->value)
