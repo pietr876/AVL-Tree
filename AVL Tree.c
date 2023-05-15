@@ -77,11 +77,10 @@ Node *counter_rotate(Node *node, int value, int balance){
 }
 
 Node *insert_node(Node *node, int value){
-    int index = is_node_valid(node);
-    NodeFunctions insertion[2] = {, new_node(value)};
-    
-    if(node == NULL)
+    if(!is_node_valid(node))
         return new_node(value);
+    
+    //node->height = compare(node_height(node->left), node_height(node->right)) + 1;
     
     int direction = is_greater(value, node->value);
     
@@ -100,7 +99,7 @@ Node *insert_node(Node *node, int value){
             node->right = rotate_node(node->right, RIGHT);
         return rotate_node(node, LEFT);
     }
-
+    
     return node;
 }
 
@@ -170,27 +169,27 @@ void delete_tree(Node *n){
     free(n);
 }
 
-void print_tree_inorder(Node *n){
-    if(n != NULL){
-        print_tree_inorder(n->left);
-        printf("\n%d", n->value);
-        print_tree_inorder(n->right);
+void print_tree_inorder(Node *node){
+    if(node != NULL){
+        print_tree_inorder(node->left);
+        printf("\n%d | %d", node->value, node->height);
+        print_tree_inorder(node->right);
     }
 }
 
-void print_tree_preorder(Node *n){
-    if(n != NULL){
-        printf("\n%d", n->value);
-        print_tree_preorder(n->left);
-        print_tree_preorder(n->right);
+void print_tree_preorder(Node *node){
+    if(node != NULL){
+        printf("\n%d", node->value);
+        print_tree_preorder(node->left);
+        print_tree_preorder(node->right);
     }
 }
 
-void print_tree_postorder(Node *n){
-    if(n != NULL){
-        print_tree_postorder(n->left);
-        print_tree_postorder(n->right);
-        printf("\n%d", n->value);
+void print_tree_postorder(Node *node){
+    if(node != NULL){
+        print_tree_postorder(node->left);
+        print_tree_postorder(node->right);
+        printf("\n%d", node->value);
     }
 }
 
