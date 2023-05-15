@@ -14,7 +14,7 @@ typedef struct node{
 #define right   child[RIGHT]
 #define TEST    10
 
-typedef Node*(*NodeFunctions)(Node*, int);
+typedef Node*(*NodeFunction)(Node*, int);
 
 Node *new_node(int value){
     Node *node = (Node *) malloc(sizeof(Node));
@@ -36,12 +36,6 @@ int node_balance(Node *n){
     if(n == NULL)
         return 0;
     return node_height(n->left) - node_height(n->right);
-}
-
-void rearrange(Node *node, int value){
-    int balance = node_balance(node);
-    
-    
 }
 
 int is_node_valid(Node *node){
@@ -71,15 +65,18 @@ Node *rotate_node(Node *n, int direction){
     return aux;
 }
 
-Node *counter_rotate(Node *node, int value, int balance){
-    node->child[1-balance] = rotate_node(node->child[1-balance], 1-balance);
-    return rotate_node(node, balance);
+Node *counter_rotate(Node *node, int direction){
+    node->child[1-direction] = rotate_node(node->child[1-direction], 1-direction);
+    return rotate_node(node, direction);
+}
+
+Node *dummy(Node* node, int i){
+    return node;
 }
 
 Node *insert_node(Node *node, int value){
     if(!is_node_valid(node))
         return new_node(value);
-    
     //node->height = compare(node_height(node->left), node_height(node->right)) + 1;
     
     int direction = is_greater(value, node->value);
@@ -93,6 +90,9 @@ Node *insert_node(Node *node, int value){
             node->left = rotate_node(node->left, LEFT);
         return rotate_node(node, RIGHT);
     }
+    /*int index = (balance > 1) + 2*(value > node->left->value);
+    NodeFunction functions[4] = {dummy, rotate_node, dummy, counter_rotate};
+    node = functions[index](node, 1);*/
 
     if(balance < -1){
         if(value < node->right->value)
@@ -172,7 +172,7 @@ void delete_tree(Node *n){
 void print_tree_inorder(Node *node){
     if(node != NULL){
         print_tree_inorder(node->left);
-        printf("\n%d | %d", node->value, node->height);
+        printf("\n%d\t|\t%d", node->value, node->height);
         print_tree_inorder(node->right);
     }
 }
