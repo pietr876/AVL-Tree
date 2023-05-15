@@ -12,7 +12,9 @@ typedef struct node{
 #define RIGHT   1
 #define left    child[LEFT]
 #define right   child[RIGHT]
-#define TEST    1000
+#define TEST    10
+
+typedef Node*(*NodeFunctions)(Node*, int);
 
 Node *new_node(int value){
     Node *node = (Node *) malloc(sizeof(Node));
@@ -36,8 +38,22 @@ int node_balance(Node *n){
     return node_height(n->left) - node_height(n->right);
 }
 
+void rearrange(Node *node, int value){
+    int balance = node_balance(node);
+    
+    
+}
+
+int is_node_valid(Node *node){
+    return 1 - (node == NULL);
+}
+
 int compare(int a, int b){
     return a*(a>b) + b*(b>a);
+}
+
+int is_greater(int a, int b){
+    return a > b;
 }
 
 Node *rotate_node(Node *n, int direction){
@@ -55,30 +71,37 @@ Node *rotate_node(Node *n, int direction){
     return aux;
 }
 
-Node *insert_node(Node *n, int value){
-    if(n == NULL)
+Node *counter_rotate(Node *node, int value, int balance){
+    node->child[1-balance] = rotate_node(node->child[1-balance], 1-balance);
+    return rotate_node(node, balance);
+}
+
+Node *insert_node(Node *node, int value){
+    int index = is_node_valid(node);
+    NodeFunctions insertion[2] = {, new_node(value)};
+    
+    if(node == NULL)
         return new_node(value);
     
-    //==============================================================//
+    int direction = is_greater(value, node->value);
     
-    int direction = compare(value, n->value) == value ? RIGHT : LEFT;
-    
-    n->child[direction] = insert_node(n->child[direction], value);    
-    n->height = compare(node_height(n->left), node_height(n->right)) + 1;  
+    node->child[direction] = insert_node(node->child[direction], value);
 
+    int balance = node_balance(node);
+    
     if(balance > 1){
-        if(value > n->left->value)
-            n->left = rotate_node(n->left, LEFT);
-        return rotate_node(n, RIGHT);
+        if(value > node->left->value)
+            node->left = rotate_node(node->left, LEFT);
+        return rotate_node(node, RIGHT);
     }
 
     if(balance < -1){
-        if(value < n->right->value)
-            n->right = rotate_node(n->right, RIGHT);
-        return rotate_node(n, LEFT);
-    }*/
+        if(value < node->right->value)
+            node->right = rotate_node(node->right, RIGHT);
+        return rotate_node(node, LEFT);
+    }
 
-    return n;
+    return node;
 }
 
 Node *min_value_node(Node *n) {
@@ -175,8 +198,12 @@ int main(){
     srand(time(NULL));
     Node *root = NULL;
     for(int i = TEST; i > 0; i--)
-        root = insert_node(root, rand());
+        root = insert_node(root, rand()%(TEST*10));
     print_tree_inorder(root);
+    /*printf("\n");
+    print_tree_preorder(root);*/
+    /*printf("\n");
+    print_tree_postorder(root);*/
     delete_tree(root);
     return 0;
 }
